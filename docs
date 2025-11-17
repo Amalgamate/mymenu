@@ -1,0 +1,436 @@
+# 🗓️ Development Roadmap - QR Menu Platform
+
+## Quick Reference Guide for Implementation
+
+---
+
+## 📋 Phase 1: Multi-Tenant MVP (6 Weeks)
+
+### Week 1: Database & Authentication Setup
+
+#### Backend Tasks
+- [ ] **Day 1-2**: Project initialization
+  - Initialize Node.js project with Express
+  - Set up TypeScript configuration
+  - Install dependencies (express, prisma, bcrypt, jsonwebtoken, etc.)
+  - Configure environment variables (.env)
+  
+- [ ] **Day 3-4**: Database schema
+  - Create Prisma schema with Tenants, Users, MenuItems, Categories tables
+  - Run migrations
+  - Seed database with test data
+  
+- [ ] **Day 5**: Authentication system
+  - Implement JWT token generation/validation
+  - Create auth middleware
+  - Build password hashing utilities
+
+#### Deliverables
+- ✅ Database schema created and migrated
+- ✅ Authentication utilities ready
+- ✅ Project structure established
+
+---
+
+### Week 2: Core Backend APIs
+
+#### Backend Tasks
+- [ ] **Day 1-2**: Tenant registration API
+  - POST /api/auth/register endpoint
+  - Slug generation logic
+  - Email validation
+  - Create tenant + admin user in transaction
+  
+- [ ] **Day 3**: Authentication APIs
+  - POST /api/auth/login
+  - POST /api/auth/logout
+  - GET /api/auth/me
+  - POST /api/auth/refresh
+  
+- [ ] **Day 4-5**: Tenant management APIs
+  - GET /api/tenants/:id
+  - PUT /api/tenants/:id
+  - GET /api/tenants/slug/:slug
+  - Tenant middleware (inject tenant context)
+
+#### Deliverables
+- ✅ Registration flow working
+- ✅ Login/logout functional
+- ✅ Tenant CRUD operations complete
+
+---
+
+### Week 3: Menu Management Backend
+
+#### Backend Tasks
+- [ ] **Day 1-2**: Enhanced menu APIs
+  - GET /api/menu (with tenant filtering)
+  - POST /api/menu (with tenant context)
+  - PUT /api/menu/:id
+  - DELETE /api/menu/:id
+  
+- [ ] **Day 3**: File upload
+  - Configure Multer middleware
+  - Image validation (type, size)
+  - Storage organization (menu-items/, logos/, qr-codes/)
+  
+- [ ] **Day 4-5**: Category APIs
+  - GET /api/categories
+  - POST /api/categories
+  - PUT /api/categories/:id
+  - DELETE /api/categories/:id
+
+#### Deliverables
+- ✅ Menu CRUD with multi-tenant support
+- ✅ Image upload working
+- ✅ Category management ready
+
+---
+
+### Week 4: Frontend Foundation
+
+#### Frontend Tasks
+- [ ] **Day 1**: Project setup
+  - Initialize React + Vite + TypeScript
+  - Install dependencies (react-router, zustand, axios, tailwind)
+  - Configure Tailwind CSS
+  - Set up routing structure
+  
+- [ ] **Day 2-3**: Authentication UI
+  - Landing page with hero section
+  - Registration form component
+  - Login form component
+  - Auth store (Zustand)
+  - Protected route wrapper
+  
+- [ ] **Day 4-5**: Tenant admin dashboard
+  - Dashboard layout with sidebar
+  - Dashboard home (stats overview)
+  - Settings page (tenant profile edit)
+  - Logo upload component
+
+#### Deliverables
+- ✅ Landing page live
+- ✅ Registration/login working
+- ✅ Admin dashboard accessible
+
+---
+
+### Week 5: Menu Management UI & QR Codes
+
+#### Frontend Tasks
+- [ ] **Day 1-2**: Menu management UI
+  - Menu items list page (table view)
+  - Menu item form (create/edit)
+  - Image upload preview
+  - Category selector
+  - Availability toggle
+  
+- [ ] **Day 3**: Customer menu view
+  - Dynamic routing (/{slug})
+  - Fetch tenant by slug
+  - Display branded menu
+  - Category filtering
+  - Menu item cards
+  
+- [ ] **Day 4**: Cart & WhatsApp checkout
+  - Cart store (Zustand)
+  - Add to cart functionality
+  - Cart summary component
+  - WhatsApp link generation
+  
+- [ ] **Day 5**: QR code generation
+  - Backend: QR code generation API
+  - Frontend: QR code display page
+  - Download options (PNG, SVG, PDF)
+
+#### Deliverables
+- ✅ Full menu management working
+- ✅ Customer can view menu and order
+- ✅ QR codes generated and downloadable
+
+---
+
+### Week 6: Testing, Polish & Deployment
+
+#### Tasks
+- [ ] **Day 1-2**: Testing
+  - End-to-end testing of all flows
+  - Fix bugs
+  - Mobile responsiveness testing
+  - PWA functionality testing
+  
+- [ ] **Day 3**: Polish
+  - Loading states
+  - Error handling
+  - Toast notifications
+  - Form validation improvements
+  
+- [ ] **Day 4-5**: Deployment
+  - Set up VPS (Ubuntu)
+  - Install Node.js, PostgreSQL, Nginx
+  - Configure Nginx reverse proxy
+  - Set up SSL with Let's Encrypt
+  - Deploy backend with PM2
+  - Build and deploy frontend
+  - Configure domain DNS
+
+#### Deliverables
+- ✅ Platform live on production domain
+- ✅ SSL configured
+- ✅ All features working in production
+- ✅ Documentation complete
+
+---
+
+## 🎯 MVP Success Checklist
+
+### Core Functionality
+- [ ] Hotel can register with email/password
+- [ ] Hotel gets unique slug (e.g., "hotel-paradise")
+- [ ] Hotel can upload logo and set brand color
+- [ ] Hotel can add/edit/delete menu items
+- [ ] Hotel can upload menu item images
+- [ ] Hotel can organize items by category
+- [ ] Hotel can toggle item availability
+- [ ] Hotel can download QR code (PNG format)
+- [ ] Customer can scan QR and view menu
+- [ ] Customer sees hotel's branding (logo, colors)
+- [ ] Customer can add items to cart
+- [ ] Customer can checkout via WhatsApp
+- [ ] WhatsApp message includes order details and hotel's number
+
+### Technical Requirements
+- [ ] Multi-tenant data isolation working
+- [ ] Authentication secure (JWT, bcrypt)
+- [ ] File uploads working (images, logos)
+- [ ] PWA installable on mobile
+- [ ] Responsive design (mobile-first)
+- [ ] HTTPS enabled
+- [ ] Database backups configured
+- [ ] Error logging implemented
+
+### Documentation
+- [ ] README with setup instructions
+- [ ] API documentation
+- [ ] User guide for hotel admins
+- [ ] Deployment guide
+
+---
+
+## 📦 Dependencies to Install
+
+### Backend
+```bash
+npm install express cors dotenv
+npm install @prisma/client
+npm install bcrypt jsonwebtoken
+npm install multer
+npm install qrcode
+npm install slugify
+npm install joi  # or zod for validation
+
+npm install -D prisma typescript @types/node @types/express
+npm install -D @types/bcrypt @types/jsonwebtoken @types/multer
+npm install -D nodemon ts-node
+```
+
+### Frontend
+```bash
+npm create vite@latest frontend -- --template react-ts
+cd frontend
+npm install react-router-dom
+npm install zustand
+npm install axios
+npm install react-hook-form
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+---
+
+## 🔧 Environment Variables
+
+### Backend (.env)
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/qrmenu"
+
+# JWT
+JWT_SECRET=your-super-secret-key-change-in-production
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_SECRET=your-refresh-secret
+JWT_REFRESH_EXPIRES_IN=7d
+
+# File Upload
+MAX_FILE_SIZE=5242880  # 5MB
+UPLOAD_DIR=./uploads
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:5173
+
+# Platform
+PLATFORM_DOMAIN=yourdomain.com
+```
+
+### Frontend (.env)
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_PLATFORM_NAME=QR Menu Platform
+```
+
+---
+
+## 🚀 Quick Start Commands
+
+### Development
+```bash
+# Backend
+cd backend
+npm install
+npx prisma migrate dev
+npm run dev
+
+# Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+### Production Deployment
+```bash
+# Backend
+cd backend
+npm install --production
+npx prisma migrate deploy
+pm2 start dist/app.js --name qrmenu-api
+
+# Frontend
+cd frontend
+npm install
+npm run build
+# Copy dist/ to /var/www/qrmenu/
+```
+
+---
+
+## 📊 Testing Checklist
+
+### Manual Testing Scenarios
+
+#### Scenario 1: Hotel Registration
+1. Visit landing page
+2. Click "Get Started"
+3. Fill registration form
+4. Submit
+5. Verify redirect to dashboard
+6. Verify slug generated correctly
+7. Verify QR code created
+
+#### Scenario 2: Menu Management
+1. Login as hotel admin
+2. Navigate to menu items
+3. Click "Add Item"
+4. Fill form with image
+5. Submit
+6. Verify item appears in list
+7. Edit item
+8. Delete item
+
+#### Scenario 3: Customer Order
+1. Scan QR code (or visit /{slug})
+2. Verify hotel branding displayed
+3. Browse menu items
+4. Add items to cart
+5. View cart
+6. Click "Order via WhatsApp"
+7. Verify WhatsApp opens with correct message
+
+---
+
+## 🎨 Design Considerations
+
+### Color Scheme
+- **Primary**: Blue (#2563eb) - Trust, professionalism
+- **Success**: Green (#10b981) - Positive actions
+- **Warning**: Yellow (#f59e0b) - Alerts
+- **Danger**: Red (#ef4444) - Destructive actions
+
+### Typography
+- **Headings**: Inter or Poppins (bold, modern)
+- **Body**: Inter or System UI (readable)
+
+### Mobile-First Breakpoints
+- **Mobile**: < 640px
+- **Tablet**: 640px - 1024px
+- **Desktop**: > 1024px
+
+---
+
+## 🔒 Security Best Practices
+
+1. **Never commit .env files** - Add to .gitignore
+2. **Use strong JWT secrets** - Generate with `openssl rand -base64 32`
+3. **Hash passwords** - bcrypt with 10+ rounds
+4. **Validate all inputs** - Use Joi/Zod schemas
+5. **Sanitize file uploads** - Check MIME types, limit sizes
+6. **Use HTTPS in production** - Let's Encrypt SSL
+7. **Implement rate limiting** - Prevent brute force attacks
+8. **Enable CORS properly** - Whitelist frontend domain only
+
+---
+
+## 📈 Post-MVP Enhancements (Phase 2)
+
+### Priority Features
+1. **Subdomain routing**: hotel-paradise.yourdomain.com
+2. **Analytics dashboard**: Views, popular items, peak hours
+3. **Bulk import**: CSV upload for menu items
+4. **Email notifications**: Order confirmations to hotel
+5. **Multi-language**: English, Swahili, French
+6. **Table numbers**: Track which table ordered
+7. **Advanced branding**: Custom fonts, themes
+8. **Staff accounts**: Kitchen staff, waiters with limited access
+
+---
+
+## 🆘 Troubleshooting Guide
+
+### Common Issues
+
+**Issue**: Database connection fails
+- **Solution**: Check DATABASE_URL in .env, ensure PostgreSQL is running
+
+**Issue**: JWT token invalid
+- **Solution**: Verify JWT_SECRET matches between token generation and validation
+
+**Issue**: File upload fails
+- **Solution**: Check UPLOAD_DIR exists and has write permissions
+
+**Issue**: QR code not generating
+- **Solution**: Ensure qrcode package installed, check file write permissions
+
+**Issue**: CORS errors
+- **Solution**: Verify FRONTEND_URL in backend .env matches frontend origin
+
+---
+
+## 📞 Next Steps After MVP
+
+1. **Gather user feedback** from first 10 hotels
+2. **Monitor analytics** - track usage patterns
+3. **Fix critical bugs** reported by users
+4. **Plan Phase 2 features** based on feedback
+5. **Consider monetization** - subscription plans
+6. **Scale infrastructure** if needed
+7. **Build marketing website** separate from platform
+8. **Create video tutorials** for hotel admins
+
+---
+
+**Ready to build! Start with Week 1 tasks.** 🚀
+

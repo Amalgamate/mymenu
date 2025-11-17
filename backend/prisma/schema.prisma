@@ -1,0 +1,102 @@
+// Prisma Schema for QR Menu Platform - Multi-Tenant Architecture
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Tenant Model - Represents hotels, restaurants, cafes, etc.
+model Tenant {
+  id            String   @id @default(uuid())
+  slug          String   @unique // e.g., "hotel-paradise"
+  businessName  String   @map("business_name")
+  businessType  String @map("business_type") // HOTEL, RESTAURANT, CAFE, BAR, INSTITUTION, OTHER
+  logoUrl       String?  @map("logo_url")
+  primaryColor  String   @default("#2563eb") @map("primary_color")
+  whatsappNumber String  @map("whatsapp_number")
+  email         String   @unique
+  status        String @default("TRIAL") // TRIAL, ACTIVE, SUSPENDED, CANCELLED
+  qrCodeUrl     String?  @map("qr_code_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  currency      String   @default("USD") @map("currency")
+
+  // Relations
+  users         User[]
+  menuItems     MenuItem[]
+  categories    Category[]
+
+  @@map("tenants")
+}
+
+// User Model - Admin users for each tenant
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String?  @map("tenant_id") // null for super admin
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String @default("TENANT_ADMIN") // SUPER_ADMIN, TENANT_ADMIN, STAFF
+  firstName    String   @map("first_name")
+  lastName     String   @map("last_name")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}
+
+// Category Model - Menu categories per tenant
+model Category {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  name        String
+  description String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  menuItems   MenuItem[]
+
+  @@map("categories")
+  @@index([tenantId])
+}
+
+// MenuItem Model - Menu items per tenant
+model MenuItem {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  categoryId  String?  @map("category_id")
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?  @map("image_url")
+  isAvailable Boolean  @default(true) @map("is_available")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@map("menu_items")
+  @@index([tenantId])
+  @@index([categoryId])
+}
+
+// Enums replaced with String constants for SQLite compatibility
+// BusinessType: "HOTEL" | "RESTAURANT" | "CAFE" | "BAR" | "INSTITUTION" | "OTHER"
+// TenantStatus: "TRIAL" | "ACTIVE" | "SUSPENDED" | "CANCELLED"
+// UserRole: "SUPER_ADMIN" | "TENANT_ADMIN" | "STAFF"
+
