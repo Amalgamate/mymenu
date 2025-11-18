@@ -61,12 +61,19 @@ model Category {
   description String?
   sortOrder   Int      @default(0) @map("sort_order")
   isActive    Boolean  @default(true) @map("is_active")
+  parentId    String?  @map("parent_id")
+  type        String   @default("MENU")
+  menuType    String?  @map("menu_type")
+  code        String?  @map("code")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   // Relations
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   menuItems   MenuItem[]
+
+  parent      Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryChildren")
 
   @@map("categories")
   @@index([tenantId])

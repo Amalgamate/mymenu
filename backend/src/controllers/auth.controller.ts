@@ -3,6 +3,7 @@ import prisma from '../config/database';
 import { hashPassword, comparePassword, generateAccessToken, generateRefreshToken } from '../utils/auth.util';
 import { generateUniqueSlug } from '../utils/slug.util';
 import { generateQRCode } from '../utils/qrcode.util';
+import { seedDefaultCategoriesForTenant } from '../utils/categorySeed.util';
 
 /**
  * Register a new tenant with admin user
@@ -35,7 +36,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     // Hash password
     const passwordHash = await hashPassword(password);
 
-    // Create tenant and admin user in a transaction
+    // Create tenant, seed default categories and admin user in a transaction
     const result = await prisma.$transaction(async (tx) => {
       // Create tenant
       const tenant = await tx.tenant.create({
@@ -57,6 +58,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         where: { id: tenant.id },
         data: { qrCodeUrl }
       });
+
+      // Seed default categories and amenities for this tenant
+      await seedDefaultCategoriesForTenant(tx as any, tenant.id, businessType);
 
       // Create admin user
       const user = await tx.user.create({
